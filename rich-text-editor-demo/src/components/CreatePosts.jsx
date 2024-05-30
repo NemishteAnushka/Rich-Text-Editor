@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import JoditEditor from "jodit-react";
 
 function CreatePosts() {
@@ -16,12 +16,7 @@ function CreatePosts() {
       return { ...prevState, [name]: value };
     });
   };
-  const handlePostContent = (newContent) => {
-    setPost((prevState) => ({
-      ...prevState,
-      post_content: newContent,
-    }));
-  };
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     console.log(post);
@@ -29,9 +24,12 @@ function CreatePosts() {
 
   const { post_title, post_content, post_category } = post;
 
-  const config = {
-    buttons: ["print", "about"],
-  };
+  const config = useMemo(
+    () => ({
+      buttons: ["bold", "italic", "underline", "|", "ul", "ol"],
+    }),
+    []
+  );
 
   return (
     <div>
@@ -67,7 +65,7 @@ onChange={handleOnChange}
               config={config}
               //   tabIndex={1} // tabIndex of textarea
               //   onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-              onChange={handlePostContent}
+              onChange={(newContent) => setPost(newContent)}
             />
           }
         </div>
